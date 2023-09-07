@@ -1,0 +1,22 @@
+---
+- name: add additional hosts to the cluster
+  hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: add hosts to the cluster
+      ceph_orch_host:
+        name: "{{ ansible_facts['hostname'] }}"
+        address: "{{ ansible_facts['default_ipv4']['address'] }}"
+      delegate_to: 10.243.0.8
+
+    - name: list hosts in the cluster
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: ceph orch host ls
+      register: host_list
+
+    - name: print current list of hosts
+      when: inventory_hostname in groups['admin']
+      debug:
+        msg: "{{ host_list.stdout }}"

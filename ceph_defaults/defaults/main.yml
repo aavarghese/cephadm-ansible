@@ -15,7 +15,6 @@ ceph_pkgs:
   - chrony
   - cephadm
   - podman
-  - ceph-common
 ceph_client_pkgs:
   - chrony
   - ceph-common

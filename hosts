@@ -1,0 +1,6 @@
+# cat hosts
+10.243.0.9 labels="['mon', 'mgr', 'osd']"
+10.243.0.10 labels="['mon', 'mgr', 'osd']"
+
+[admin]
+10.243.0.8 monitor_address=10.243.0.8 labels="['_admin', 'mon', 'mgr']"
