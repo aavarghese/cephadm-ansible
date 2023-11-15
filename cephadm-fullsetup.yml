@@ -1,0 +1,29 @@
+---
+# Copyright Red Hat
+# SPDX-License-Identifier: Apache-2.0
+#
+# This playbook configures the Ceph repository.
+# It also installs some prerequisites (podman, lvm2, chronyd, cephadm, ...), bootstraps the cluster, copies an SSH public key to a specified user on remote hosts, and add additional hosts to the cluster
+#
+# Usage:
+#
+# ansible-playbook -i <inventory host file> cephadm-fullsetup.yml
+#
+# You can limit the execution to a set of hosts by using `--limit` option:
+#
+# ansible-playbook -i <inventory host file> cephadm-fullsetup.yml --limit <my_osd_group|my_node_name>
+#
+# You can override variables using `--extra-vars` parameter:
+#
+# ansible-playbook -i <inventory host file> cephadm-fullsetup.yml --extra-vars "ceph_origin=rhcs"
+#
+
+- import_playbook: cephadm-preflight.yml
+
+- import_playbook: cephadm-bootstrap.yml
+
+- import_playbook: cephadm-distribute-ssh-key.yml
+  vars:
+    admin_node: "{{ groups.get('admin')[0] }}"
+
+- import_playbook: cephadm-addhosts.yml
