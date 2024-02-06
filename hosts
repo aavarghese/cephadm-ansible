@@ -1,42 +1,41 @@
 [ceph_cluster]
-[ceph_cluster]
-10.243.2.15 monitor_address=10.243.2.15 labels="['_admin', 'mons', 'mgrs', 'osds']"
-10.243.2.16 monitor_address=10.243.2.15 labels="['mons', 'mgrs', 'osds']"
-10.243.2.17 monitor_address=10.243.2.15 labels="['mons', 'mgrs', 'osds']"
-10.243.2.18 monitor_address=10.243.2.15 labels="['mons', 'mgrs', 'osds']"
-10.243.2.19 monitor_address=10.243.2.15 labels="['mons', 'mgrs', 'osds']"
-10.243.2.20 monitor_address=10.243.2.15 labels="['mons', 'mgrs', 'osds']"
+10.244.0.4 monitor_address=10.244.0.4 labels="['_admin', 'mons', 'mgrs', 'osds']"
+10.244.0.5 monitor_address=10.244.0.4 labels="['mons', 'mgrs', 'osds']"
+10.244.0.6 monitor_address=10.244.0.4 labels="['mons', 'mgrs', 'osds']"
+10.244.0.8 monitor_address=10.244.0.4 labels="['mons', 'mgrs', 'osds']"
+10.244.0.9 monitor_address=10.244.0.4 labels="['mons', 'mgrs', 'osds']"
+10.244.0.11 monitor_address=10.244.0.4 labels="['mons', 'mgrs', 'osds']"
 
 [clients]
-10.243.2.16
-10.243.2.17
-10.243.2.18
-10.243.2.19
-10.243.2.20
+10.244.0.5
+10.244.0.6
+10.244.0.8
+10.244.0.9
+10.244.0.11
 
 [mons]
-10.243.2.15
-10.243.2.16
-10.243.2.17
-10.243.2.18
-10.243.2.19
-10.243.2.20
+10.244.0.4
+10.244.0.5
+10.244.0.6
+10.244.0.8
+10.244.0.9
+10.244.0.11
 
 [mgrs]
-10.243.2.15
-10.243.2.16
-10.243.2.17
-10.243.2.18
-10.243.2.19
-10.243.2.20
+10.244.0.4
+10.244.0.5
+10.244.0.6
+10.244.0.8
+10.244.0.9
+10.244.0.11
 
 [osds]
-10.243.2.15
-10.243.2.16
-10.243.2.17
-10.243.2.18
-10.243.2.19
-10.243.2.20
+10.244.0.4
+10.244.0.5
+10.244.0.6
+10.244.0.8
+10.244.0.9
+10.244.0.11
 
 [admin]
-10.243.2.15 monitor_address=10.243.2.15 labels="['_admin', 'mons', 'mgrs', 'osds']"
+10.244.0.4 monitor_address=10.244.0.4 labels="['_admin', 'mons', 'mgrs', 'osds']"
