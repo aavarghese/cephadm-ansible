@@ -45,18 +45,6 @@
     - name: redhat family of OS related tasks
       when: ansible_facts['distribution'] == 'CentOS' or ansible_facts['distribution'] == 'RedHat'
       block:
-        - name: rhcs related tasks
-          when: ceph_origin == 'rhcs'
-          block:
-            - name: enable red hat ceph storage tools repository
-              rhsm_repository:
-                name: "rhceph-{{ ceph_rhcs_version }}-tools-for-rhel-{{ ansible_facts['distribution_major_version'] }}-{{ ansible_facts['architecture'] }}-rpms"
-
-            - name: disable older rhceph repositories if any
-              rhsm_repository:
-                name: "{{ repos_to_disable }}"
-                state: absent
-
         - name: enable ceph package repositories
           when: ceph_origin in ['community', 'ibm']
           block:
@@ -169,13 +157,6 @@
             state: absent
             autoremove: no
 
-        - name: install ceph-common on rhel
-          package:
-            name: ceph-common
-            state: "{{ (upgrade_ceph_packages | bool) | ternary('latest', 'present') }}"
-          register: result
-          until: result is succeeded
-
         - name: install prerequisites packages
           package:
             name: "{{ ceph_pkgs }}"
@@ -234,7 +215,7 @@
 
         - name: install prerequisites packages
           apt:
-            name: "{{ ['python3','cephadm','ceph-common'] }}"
+            name: "{{ ['python3','cephadm'] }}"
             state: "{{ (upgrade_ceph_packages | bool) | ternary('latest', 'present') }}"
             update_cache: yes
           register: result

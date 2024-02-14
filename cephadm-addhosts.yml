@@ -1,0 +1,81 @@
+---
+- name: add additional hosts to the cluster
+  hosts: ceph_cluster
+  become: true
+  gather_facts: true
+  tasks:
+    - name: add hosts to the cluster
+      when: inventory_hostname in groups['clients']
+      ceph_orch_host:
+        name: "{{ ansible_facts['hostname'] }}"
+        address: "{{ ansible_facts['default_ipv4']['address'] }}"
+      delegate_to: "{{ monitor_address }}"
+
+    - name: list hosts in the cluster
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph orch host ls
+      register: host_list
+
+    - name: print current list of hosts
+      when: inventory_hostname in groups['admin']
+      debug:
+        msg: "{{ host_list.stdout }}"
+
+    - name: add OSDs to the cluster
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph orch apply osd --all-available-devices
+      register: host_list
+
+    - name: add MDSes to the cluster
+      when: inventory_hostname in groups['admin']
+      ceph_orch_apply:
+        spec: |
+          service_type: mds
+          service_id: cephfs
+          placement:
+            count: 12
+      register: host_list
+
+    - name: create filesystem volume
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph fs volume create cephfs
+      register: host_list
+
+    - name: increase active MDS daemons
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph fs set cephfs max_mds 12
+      register: host_list
+
+    - name: increase PGs
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph osd pool set cephfs.cephfs.data pg_num 3
+      register: host_list
+
+    - name: increase MDS cache size limit
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph config set mds mds_cache_memory_limit 8589934592
+      register: host_list
+
+    - name: print status of cluster
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph status
+      register: host_list
+
+    - name: print status of file system
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph fs status cephfs
+      register: host_list
+
+    - name: get base64 authkey for admin client
+      when: inventory_hostname in groups['admin']
+      ansible.builtin.shell:
+        cmd: cephadm shell ceph auth get-key client.admin | base64
+      register: host_list
